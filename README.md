@@ -6,15 +6,15 @@ Riddle Game Workshop was built to showcase advanced skill building techniques. A
 
 This workshop is split into 5 sections. Each section builds off the previous, and gets more advanced per step:
 
-- **Step 0 - Initialize Riddle Game**: You will create and configure the Riddle Game skill using the Alexa Skills Kit SDK in NodeJS and AWS Lambda. When launched, this Alexa skill will have the customer interact with a riddle game that features a simple voice interaction and using session attributes.
+- [**Step 0 - Initialize Riddle Game**](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%200%20-%20Initialize%20Riddle%20Game): You will create and configure the Riddle Game skill using the Alexa Skills Kit SDK in NodeJS and AWS Lambda. When launched, this Alexa skill will have the customer interact with a riddle game that features a simple voice interaction and using session attributes.
 
-- **Step 1 - Add Dialog Management**: At the beginning of the skill, you will prompt the user not only for the difficulty level, but also how many questions they'd like to be asked in the game.
+- [**Step 1 - Add Dialog Management**](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%201%20-%20Add%20Dialog%20Management): At the beginning of the skill, you will prompt the user not only for the difficulty level, but also how many questions they'd like to be asked in the game.
 
-- **Step 2 - Add In-Skill Purchasing**: A customer can now buy the ability to ask for hints within the game. There are 3 hints per question.
+- [**Step 2 - Add In-Skill Purchasing**](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%202%20-%20Add%20ISP): A customer can now buy the ability to ask for hints within the game. There are 3 hints per question.
 
-- **Step 3 - Add Displays with the Alexa Presentation Language**: With APL, you can develop visual templates for skills formatted anyway you'd like. This integration allows customers to interact with their multimodal devices and the skill.
+- [**Step 3 - Add Displays with the Alexa Presentation Language**](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%203%20-%20Add%20APL): With APL, you can develop visual templates for skills formatted anyway you'd like. This integration allows customers to interact with their multimodal devices and the skill.
 
-- **Step 4 - Add Echo Buttons with the Gadgets API**: With the integration of Echo Buttons, a customer is able to now play Riddle Game with 2 players. The player will hit a button when they know the answer, whoever gets the most points at the end of the 5 riddles wins.
+- [**Step 4 - Add Echo Buttons with the Gadgets API**](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%204%20-%20Add%20Gadgets): With the integration of Echo Buttons, a customer is able to now play Riddle Game with 2 players. The player will hit a button when they know the answer, whoever gets the most points at the end of the 5 riddles wins.
 
 ## License
 
