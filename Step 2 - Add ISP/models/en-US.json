@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "riddle game workshop advanced voice",
+            "invocationName": "riddle game workshop skill purchasing",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -143,6 +143,23 @@
                 {
                     "name": "AMAZON.ScrollUpIntent",
                     "samples": []
+                },
+                {
+                    "name": "HintIntent",
+                    "slots": [],
+                    "samples": [
+                        "i need another clue",
+                        "i need another hint",
+                        "i need a clue",
+                        "i need a hint",
+                        "give me a hint",
+                        "tell me a hint",
+                        "hint",
+                        "i want a clue",
+                        "clue",
+                        "give me a clue",
+                        "tell me a clue"
+                    ]
                 }
             ],
             "types": [

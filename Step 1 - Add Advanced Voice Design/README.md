@@ -170,7 +170,7 @@ if (sessionAttributes.currentIndex == sessionAttributes.totalRids) {
 sessionAttributes.totalRids = 5;
 ```
 
-11. **Upload your code** and click the **Save** button in the top of the page. This will upload your function code into the Lambda container.
+11. **Upload your code** to your Lambda function and click the **Save** button in the top of the page. This will upload your function code into the Lambda container.
 
 After the Save is complete, you may or may not be able your code editor inline.
 
