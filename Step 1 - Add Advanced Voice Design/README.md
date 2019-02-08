@@ -101,48 +101,87 @@ level {level}
 11. Scroll up, and click **Save Model**.
 12. Once it is done being saved, click **Build Model**.
 
-### Task 1.4: Update your Skill Lambda
+### Task 1.3: Update your Skill Lambda
 
-At this point in your development lifecycle, I recommend updating your code locally as it could start to get large. The code editor in AWS Lambda may not show your code depending on its size. With each iteration of your skill code, you can [**Upload a .zip** into Lambda]().
+At this point in your development lifecycle, I recommend updating your code locally as it could start to get large. The code editor in AWS Lambda may not show your code depending on its size. With each iteration of your skill code, you can [**Upload a .zip** into Lambda](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%200%20-%20Initialize%20Riddle%20Game#uploadzip).
 
-14. In the **Designer** view, under **Add Triggers** , select **Alexa Skills Kit**
-15. In the upper-right corner of the page, **copy your ARN**. Copy everything except &quot;ARN-&quot;. It will look like this:
-`arn:aws:lambda:us-east-1:123456789012:function:riddleGameWorkshop`
-16. Now **switch browser tabs back to your skill** in the developer portal. You should be on the configuration page. (If you closed the browser tab, here&#39;s how to get back: Go to  [http://developer.amazon.com](http://developer.amazon.com/), sign in, click Alexa, click Alexa Skills Kit, click on your skill name, click on configuration from the left-hand menu).
-17. Select **Endpoint** from the left menu.
-18. For the service endpoint type, choose the **AWS Lambda ARN (Amazon Resource Name)** radio button.
-19. **Paste your Lambda ARN** into the Default text field.
-20. Click **Save Endpoints**.
-21. Copy your skill ID.
-22. Navigate back to your **Lambda function tab**. **Click** on the **Alexa Skills Kit** trigger that we previously added in the **Designer** view (it should say &quot;Configuration Required&quot; underneath).
-23. Scroll down to the **Configure Triggers** view.
-24. Skill id verification: **Enabled**
-25. **Paste** your skill id.
-26. Click **Add.**
-27. Click **Save**.
+1. Open **index.js**
+2. In the `handle` of your `LaunchRequestHanler`, update the `speechText` to also request a name, favorite color, and number of riddles.
 
-Next, we will upload the Riddle Game skill code into Lambda. You should now see details of your riddleGameWorkshop Lambda function that includes your function&#39;s ARN in the upper right and the Configuration view of your function.
+```
+    const speechText = "Welcome to Level Up Riddles! Before we get started, I need a few pieces of information."
+        + " What is your name and favorite color?"
+        + " How many riddles would you like to play with?"
+        + " Would you like to start with easy, medium, or hard riddles?";
+```
 
-28. Click on the **riddleGameWorkshop** part of the tree in the **Designer** view.
-29. Scroll down to see the **Function code** view.
-30. Code Entry Type: **Upload a .zip file**
-31. Ensure **Node.js 8.10** is selected for **Runtime**
-32. Handler: **index.handler**.
-33. Function Package: **Upload** a .zip of the contents in the lambda/custom folder of this repo.
-34. Click the **Save** button in the top of the page. This will upload your function code into the Lambda container.
+3. Now we need to store those slot values as variables in our code, and use them within our skill logic. Navigate to `PlayGameIntentHandler`.
+In the `handle` of `PlayGameIntentHandler`, you will see that we are already getting the value of the `level` slot and defaulting to `'easy'` if it isn't filled. Now that we have marked `level` as required, we no longer need that condition.
+4. Delete `const spokenLevel = ... if(spokenLevel) {...} else {...}`.
+5. Insert the following line:
 
-After the Save is complete, you should see your code editor inline (Note, if your function code becomes large, this view will not be available after uploading, but will still run). 
+```
+sessionAttributes.currentLevel = request.intent.slots.level.value;
+```
 
-### Task 1.6: Test your voice interaction
+We need to check and see if the customer provided a `name`, `color`. 
+
+6. Insert the following conditions:
+
+```
+    // Store the slot values for name and color
+    if (request.intent.slots.name.value) {
+      sessionAttributes.name = request.intent.slots.name.value;
+    }
+
+    if (request.intent.slots.color.value) {
+      sessionAttributes.color = request.intent.slots.color.value;
+    }
+```
+Finally, we need to check if the customer has provided a value for `riddleNum`. If they have, we need to assure that the number does not exceed 5, and that the game only lists off that number of riddles.
+
+6. Insert the following condition:
+
+```
+    // Check if the slot value for riddleNum is filled and <5, otherwise default to 5
+    const riddleNum = request.intent.slots.riddleNum.value;
+    if (riddleNum) {
+      sessionAttributes.totalRids = riddleNum <= 5 ? riddleNum : 5;
+    } else {
+      sessionAttributes.totalRids = 5;
+    }
+
+```
+
+Now we need to update the `AnswerRiddleIntentHandler` to incorporate what the user potentially provided for `riddleNum`.
+
+7. Navigate to `AnswerRiddleIntentHandler`.
+8. In `handle`, find the line `if (sessionAttributes.currentIndex == RIDDLES.LEVELS[sessionAttributes.currentLevel].length)`
+9. Update the condition to instead read:
+
+```
+// If the customer has gone through all riddles, report the score
+if (sessionAttributes.currentIndex == sessionAttributes.totalRids) {
+```
+
+10. Finally, we need to reset the `totalRids` attribute to 5 if this condition is true, indicating that the game is over and the customer can refill the `riddleNum` slot. Add the following line within the condition:
+
+```
+sessionAttributes.totalRids = 5;
+```
+
+11. **Upload your code** and click the **Save** button in the top of the page. This will upload your function code into the Lambda container.
+
+After the Save is complete, you may or may not be able your code editor inline.
+
+### Task 1.4: Test your voice interaction
 
 We&#39;ll now test your skill in the Developer Portal. You can also optionally test your skill in AWS Lambda using the JSON Input from the testing console.
 
-1. Switch browser tabs to **the developer portal** (If you closed the browser tab, here&#39;s how to get back: Go to  [http://developer.amazon.com](http://developer.amazon.com/), sign in, click Alexa, click Alexa Skills Kit, click on your skill name, click on configuration from the left-hand menu).
-2. Scroll to the top of the page and click **Test**.
-3. Switch **Test is disabled for this skill** to Development.
-4. In **Alexa Simulator** tab, under **Type or click…**, type &quot;open riddle game workshop&quot;
-5. You should hear and see Alexa respond with the message in your LaunchRequest.
-
+1. Navigate to the **Test** tab of the Developer Portal.
+2. In **Alexa Simulator** tab, under **Type or click…**, type &quot;open riddle game workshop&quot;
+3. You should hear and see Alexa respond with the message in your LaunchRequest. Now type "i want three easy riddles".
+4. Walk through the game and assure that only 3 riddles are asked.
 
 
 ### Congratulations! You have finished section 1!
