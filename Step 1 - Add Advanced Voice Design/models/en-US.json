@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "riddle game workshop",
+            "invocationName": "riddle game workshop advanced voice",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -20,10 +20,50 @@
                     "slots": [
                         {
                             "name": "level",
-                            "type": "levelType"
+                            "type": "levelType",
+                            "samples": [
+                                "{riddleNum} {level}",
+                                "{riddleNum} {level} riddles",
+                                "{level} riddles",
+                                "level {level}",
+                                "{level}"
+                            ]
+                        },
+                        {
+                            "name": "riddleNum",
+                            "type": "AMAZON.NUMBER"
+                        },
+                        {
+                            "name": "name",
+                            "type": "AMAZON.US_FIRST_NAME"
+                        },
+                        {
+                            "name": "color",
+                            "type": "AMAZON.Color"
                         }
                     ],
                     "samples": [
+                        "{riddleNum} of the {level} riddles",
+                        "{name} {color} {riddleNum} level {level}",
+                        "{name} and {color} and i want {riddleNum} {level} riddles",
+                        "give me {riddleNum} {level}",
+                        "my favorite color is {color} and {riddleNum} {level}",
+                        "i like {color} and {level} riddles",
+                        "let's start",
+                        "i want to play",
+                        "i want {riddleNum} riddles",
+                        "give me {riddleNum} riddles",
+                        "my name is {name}",
+                        "my name is {name} and my favorite color is {color}",
+                        "i am {name}",
+                        "i am {name} and i like {color}",
+                        "my favorite color is {color}",
+                        "i like {color}",
+                        "i want {riddleNum} {level} riddles",
+                        "give me {riddleNum} {level} riddles",
+                        "my name is {name} and i want {level} riddles",
+                        "my name is {name} and i want {riddleNum} {level} riddles",
+                        "my name is {name} and my favorite color is {color} and i want {riddleNum} {level} riddles",
                         "how about {level} riddles",
                         "lets do some {level} riddles",
                         "{level} ones",
@@ -61,48 +101,48 @@
                     ]
                 },
                 {
-                  "name": "AMAZON.MoreIntent",
-                  "samples": []
+                    "name": "AMAZON.MoreIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.NavigateHomeIntent",
-                  "samples": []
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.NavigateSettingsIntent",
-                  "samples": []
+                    "name": "AMAZON.NavigateSettingsIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.NextIntent",
-                  "samples": []
+                    "name": "AMAZON.NextIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.PageUpIntent",
-                  "samples": []
+                    "name": "AMAZON.PageUpIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.PageDownIntent",
-                  "samples": []
+                    "name": "AMAZON.PageDownIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.PreviousIntent",
-                  "samples": []
+                    "name": "AMAZON.PreviousIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.ScrollRightIntent",
-                  "samples": []
+                    "name": "AMAZON.ScrollRightIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.ScrollDownIntent",
-                  "samples": []
+                    "name": "AMAZON.ScrollDownIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.ScrollLeftIntent",
-                  "samples": []
+                    "name": "AMAZON.ScrollLeftIntent",
+                    "samples": []
                 },
                 {
-                  "name": "AMAZON.ScrollUpIntent",
-                  "samples": []
+                    "name": "AMAZON.ScrollUpIntent",
+                    "samples": []
                 }
             ],
             "types": [
@@ -523,6 +563,72 @@
                     ]
                 }
             ]
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "PlayGameIntent",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "level",
+                            "type": "levelType",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1456697663557.1392510278084"
+                            }
+                        },
+                        {
+                            "name": "riddleNum",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "name",
+                            "type": "AMAZON.US_FIRST_NAME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "color",
+                            "type": "AMAZON.Color",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1456697663557.1392510278084",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Nice to meet you {name} . You want to play through {riddleNum} riddles. Would you like those to be easy, medium, or hard?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Which category would you like your {riddleNum} riddles to be sourced from, easy, medium, or hard?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Hi {name}, do you want easy, medium or hard riddles?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Do you want easy, medium, or hard riddles?"
+                    }
+                ]
+            }
+        ]
     }
 }

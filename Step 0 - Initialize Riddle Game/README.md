@@ -25,18 +25,18 @@ The Alexa Skills Kit (ASK) is a collection of self-service APIs, tools, document
 
 This task will walk you through creating a simple skill that quizzes the customer through Easy, Medium and Hard riddles. Through this you will use the Alexa skills kit to learn the fundamentals of building a voice user experience.
 
-### Task 1.1: Create an Account on developer.amazon.com (or Sign In)
+### Task 0.1: Create an Account on developer.amazon.com (or Sign In)
 
 1. Navigate to the Amazon Developer Portal at[https://developer.amazon.com/alexa](https://developer.amazon.com/alexa).
 2. Click **Sign In** in the upper right to create a free account.
 
-### Task 1.2: Create the Hello World Skill
+### Task 0.2: Create the Riddle Game Workshop Skill
 
 1. When signed in, click **Your Alexa Dashboards** in the upper right.
 2. Choose **Get Started** under Alexa Skills Kit. Alexa Skills Kit will enable you to add new skills to Alexa. (The other option, Alexa Voice Services, is what you use if you want to put Alexa onto other devices such as a Raspberry Pi.)
 3. To start the process of creating a skill, click the **Create Skill** button on the right.
 
-### Task 1.3: Skill Information
+### Task 0.3: Skill Information
 
 1. Skill Name:enter **Riddle Game Workshop**.
 2. Skill Type: Select **Custom Interaction Model**.
@@ -46,22 +46,22 @@ This task will walk you through creating a simple skill that quizzes the custome
 6. Select the **Start from scratch** template.
 7. Click **Choose**.
 
-### Task 1.4: Interaction Model
+### Task 0.4: Interaction Model
 
 1. In the navigation menu on the left, choose **JSON Editor**.
 2. **Copy** the JSON from [the en-US language model](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%200%20-%20Initialize%20Riddle%20Game/models/en-US.json).
 
 Each of these JSON fields are **Intents**. Intents represent what your skill can do, they are an action Alexa will take. To prompt Alexa for the action, a user would say an **Utterance**. In the case of the **CancelIntent** , the **Utterance** a user would say to perform the cancel action would be &quot;cancel riddles game workshop&quot;.
 
-Some of the utterances include **Slots**. These are items that are variable to what the user says. In the context of this skill, there are two slot types. The first is `levelType` which defines a level a user could select. The second is `answerType`, which defines the  correct answers a customer could say to the give riddle. Each slot has synonyms associated to it, which are resolved in the skill code through **Entity Resolution**.
+This skill has two customer intents: `PlayGameIntent` and `AnswerRiddleIntent`. The `PlayGameIntent` starts the gameplay according to the level the user specifies. The `AnswerRiddleIntent` accepts the customer's answer to the riddle, and outputs the next riddle in the series or ends the game.
 
-This skill is relatively basic thus far, so our intent model just uses the default built-in intents for Help and Stop/Cancel.
+Some of the utterances include **Slots**. These are items that are variable to what the user says. In the context of this skill, there are two custom slot types. The first is `levelType` which defines a level a user could select. The second is `answerType`, which defines the  correct answers a customer could say to the give riddle. Each slot has synonyms associated to it, which are resolved in the skill code through **Entity Resolution**.
 
 3. Click the **Save Model** button. This will start the process of creating your interaction (If you did not make changes in the Code Editor the **Save Model** button is gray).
 4. Click on **Build Model.**
 8. We&#39;re now done with the Interaction Model. Choose **Enpoints** in the left menu.
 
-### Task 1.5: Configuration
+### Task 0.5: Configuration
 
 Your skill needs to be connected to an endpoint that will perform your skill logic. We will be using AWS Lambda for this lab. We will create the Riddle Game Workshop skill Lambda function, copy its ARN (Amazon Resource Name), and paste it into your skill&#39;s configuration page.
 
@@ -96,7 +96,7 @@ The Lambda function for your skill has now been created. Now you need to attach 
 26. Click **Add.**
 27. Click **Save**.
 
-Next, we will upload the Riddle Game skill code into Lambda. You should now see details of your riddleGameWorkshop Lambda function that includes your function&#39;s ARN in the upper right and the Configuration view of your function.
+<a name="uploadzip"></a>Next, we will upload the Riddle Game skill code into Lambda. You should now see details of your riddleGameWorkshop Lambda function that includes your function&#39;s ARN in the upper right and the Configuration view of your function.
 
 28. Click on the **riddleGameWorkshop** part of the tree in the **Designer** view.
 29. Scroll down to see the **Function code** view.
@@ -108,7 +108,7 @@ Next, we will upload the Riddle Game skill code into Lambda. You should now see 
 
 After the Save is complete, you should see your code editor inline (Note, if your function code becomes large, this view will not be available after uploading, but will still run). 
 
-### Task 1.6: Test your voice interaction
+### Task 0.6: Test your voice interaction
 
 We&#39;ll now test your skill in the Developer Portal. You can also optionally test your skill in AWS Lambda using the JSON Input from the testing console.
 
@@ -120,8 +120,7 @@ We&#39;ll now test your skill in the Developer Portal. You can also optionally t
 
 
 
-
-### Congratulations! You have finished section 0!
+### Congratulations! You have finished Task 0!
 
 
 ## License

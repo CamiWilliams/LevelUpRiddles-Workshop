@@ -22,60 +22,88 @@ Real conversations are dynamic, moving between topics and ideas fluidly. To crea
 
 To read about Dialog Management, go [here](https://build.amazonalexadev.com/alexa-skill-dialog-management-guide-ww.html).
 
-### Task 1.1: Create an Account on developer.amazon.com (or Sign In)
+### Task 1.1: Update your Interfaces
+In order to achieve our more advanced conversational experience, we need to incorporate Auto Delegation into our skill.
 
 1. Navigate to the Amazon Developer Portal at[https://developer.amazon.com/alexa](https://developer.amazon.com/alexa).
-2. Click **Sign In** in the upper right to create a free account.
+2. Click **Sign In** in the upper right.
+3. When signed in, click **Your Alexa Dashboards** in the upper right.
+4. Choose your **Riddle Game Workshop** skill.
+5. Click on **Interfaces** on the left menu.
+6. Assure that **Auto Delegation** is toggled. Note: it may already be toggled as it is enabled by default.
 
-### Task 1.2: Create the Hello World Skill
+### Task 1.2: Use Auto Delegation in your Interaction Model
+When a customer launches the Riddle Game Workshop skill, we want to update our opening message to request that they provide what level they want to source riddles from, along with how many riddles they would like to play with, their name, and favorite color.
 
-1. When signed in, click **Your Alexa Dashboards** in the upper right.
-2. Choose **Get Started** under Alexa Skills Kit. Alexa Skills Kit will enable you to add new skills to Alexa. (The other option, Alexa Voice Services, is what you use if you want to put Alexa onto other devices such as a Raspberry Pi.)
-3. To start the process of creating a skill, click the **Create Skill** button on the right.
+As the skill stands, we already have the `level` slot in the `PlayGameIntent`. In this task, we want to make that the required slot, and add optional slots of `riddleNum`, `name`, and `color`.
 
-### Task 1.3: Skill Information
+1. Select the **PlayGameIntent** in the left menu, under Interaction Model. This is the intent logically follows the LaunchRequest, where Alexa will prompt the user for the `level` slot to be filled.
+2. Scroll down to **Intent Slots**. In row 2, toggle your mouse into _Create a new slot_ and type "riddleNum".
+3. Hit the **+** icon or _Enter_.
+4. Repeat the same process for "name" and "color".
+5. Next to each new slot, there is a dropdown menu to _Select a slot type_. For "riddleNum", select **AMAZON.NUMBER**.
+3. For "name", select **AMAZON.US_FIRST_NAME**.
+4. For "color", select **AMAZON.Color**.
+5. Scroll up to **Sample Utterances**. Add each of the following utterances individually:
 
-1. Skill Name:enter **Riddle Game Workshop**.
-2. Skill Type: Select **Custom Interaction Model**.
-3. Language: Select **English (U.S.).**
-4. Invocation Name: **riddle game workshop**. This will be the name that you will use to start your skill (eg.,&quot;Alexa, Open _[hello world__]_&quot;.) The invocation name you choose needs to be more than one word and not contain a brand name. Remember the invocation name for future use in this lab.
-5. Click **Create Skill**.
-6. Select the **Start from scratch** template.
-7. Click **Choose**.
+```
+let's start
+i want to play
+i want {riddleNum} riddles
+give me {riddleNum} riddles
+my name is {name}
+my name is {name} and my favorite color is {color}
+i am {name}
+i am {name} and i like {color}
+my favorite color is {color}
+{riddleNum} of the {level} riddles
+i like {color}
+i like {color} and {level} riddles
+my favorite color is {color} and {riddleNum} {level}
+i want {riddleNum} {level} riddles
+give me {riddleNum} {level} riddles
+my name is {name} and i want {level} riddles
+my name is {name} and i want {riddleNum} {level} riddles
+my name is {name} and my favorite color is {color} and i want {riddleNum} {level} riddles
+give me {riddleNum} {level}
+{name} and {color} and i want {riddleNum} {level} riddles
+{name} {color} {riddleNum} level {level}
+```
+Each of these utterances shows a varying combination of what a customer could say to initiate the gameplay, on top of the utterances we already have trained in our skill. Now, we need to make sure that out of each of these, the customer will at least fill the `level` slot.
 
-### Task 1.4: Interaction Model
+5. Under **Intent Slots**, click on "level".
+6. Toggle "Is this slot required to fulfill the intent" under **Slot Filling**.
 
-1. In the navigation menu on the left, choose **JSON Editor**.
-2. **Copy** the JSON from [the en-US language model](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%200%20-%20Initialize%20Riddle%20Game/models/en-US.json).
+You will see two fields appear: **Alexa speech prompts** and **User utterances**. The former is what Alexa will say to prompt the user to fill the `level` slot. The latter is what the user might say in response to Alexa's prompt.
 
-Each of these JSON fields are **Intents**. Intents represent what your skill can do, they are an action Alexa will take. To prompt Alexa for the action, a user would say an **Utterance**. In the case of the **CancelIntent** , the **Utterance** a user would say to perform the cancel action would be &quot;cancel riddles game workshop&quot;.
+7. Add the following to **Alexa speech prompts**.
 
-Some of the utterances include **Slots**. These are items that are variable to what the user says. In the context of this skill, there are two slot types. The first is `levelType` which defines a level a user could select. The second is `answerType`, which defines the  correct answers a customer could say to the give riddle. Each slot has synonyms associated to it, which are resolved in the skill code through **Entity Resolution**.
+```
+Do you want easy, medium, or hard riddles?
+Hi {name}, do you want easy, medium or hard riddles?
+Which category would you like your {riddleNum} riddles to be sourced from, easy, medium, or hard?
+Nice to meet you {name}. You want to play through {riddleNum} riddles. Would you like those to be easy, medium, or hard?
+```
+Notice how you can incorporate slots that the customer has potentially filled within your speech prompt.
 
-This skill is relatively basic thus far, so our intent model just uses the default built-in intents for Help and Stop/Cancel.
+8. Add the following to **User utterances**.
 
-3. Click the **Save Model** button. This will start the process of creating your interaction (If you did not make changes in the Code Editor the **Save Model** button is gray).
-4. Click on **Build Model.**
-8. We&#39;re now done with the Interaction Model. Choose **Enpoints** in the left menu.
+```
+{level}
+level {level}
+{level} riddles
+{riddleNum} {level} riddles
+{riddleNum} {level}
+{riddleNum} of the {level} riddles
+```
+9. Now navigate back to your `PlayGameIntent`.
+10. You will notice under **Dialog Delegation Strategy** that "fallback to skill setting" is selected. Select **enable auto delegation**.
+11. Scroll up, and click **Save Model**.
+12. Once it is done being saved, click **Build Model**.
 
-### Task 1.5: Configuration
+### Task 1.4: Update your Skill Lambda
 
-Your skill needs to be connected to an endpoint that will perform your skill logic. We will be using AWS Lambda for this lab. We will create the Riddle Game Workshop skill Lambda function, copy its ARN (Amazon Resource Name), and paste it into your skill&#39;s configuration page.
-
-1. In a new browser tab, go to [http://aws.amazon.com](http://aws.amazon.com/)
-2. **Sign in** to the management console.
-3. From the region selector in the upper right, be sure that you&#39;re in the **US East (N. Virginia)** region.
-4. From the Services menu on the left of the top menu bar, choose **Services | Compute | Lambda**.
-5. Click the orange **Create Function** button in the upper right.
-6. Assure that **Author from scratch** is toggled.
-7. Name: **riddleGameWorkshop**
-8. Runtime: NodeJS 8.10
-9. Role: **Create a new role from one or more template(s)**
-10. Role name: **riddleGameWorkshopRole**
-11. Policy templates: **Simple microservice permissions**
-12. Click the orange **Create function** in the lower right.
-
-The Lambda function for your skill has now been created. Now you need to attach your skill to it.
+At this point in your development lifecycle, I recommend updating your code locally as it could start to get large. The code editor in AWS Lambda may not show your code depending on its size. With each iteration of your skill code, you can [**Upload a .zip** into Lambda]().
 
 14. In the **Designer** view, under **Add Triggers** , select **Alexa Skills Kit**
 15. In the upper-right corner of the page, **copy your ARN**. Copy everything except &quot;ARN-&quot;. It will look like this:
@@ -117,8 +145,7 @@ We&#39;ll now test your skill in the Developer Portal. You can also optionally t
 
 
 
-
-### Congratulations! You have finished section 0!
+### Congratulations! You have finished section 1!
 
 
 ## License
