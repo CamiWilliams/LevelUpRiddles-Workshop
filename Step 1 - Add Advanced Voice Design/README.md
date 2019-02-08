@@ -184,7 +184,7 @@ We&#39;ll now test your skill in the Developer Portal. You can also optionally t
 4. Walk through the game and assure that only 3 riddles are asked.
 
 
-### Congratulations! You have finished section 1!
+### Congratulations! You have finished Task 1!
 
 
 ## License
