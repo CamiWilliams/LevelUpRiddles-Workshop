@@ -1,4 +1,4 @@
-# Add Dialog Management 
+# Add Advanced Voice Design
 
 In this section of the workshop, you will incorporate Auto slot delegation into your skill. Auto delegation promotes a more conversational VUI design. When launched, this Alexa skill will have the customer interact with a Riddle Game skill that requests them to provide both the level type and how many questions they'd like to answer.
 
