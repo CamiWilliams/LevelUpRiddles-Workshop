@@ -96,7 +96,7 @@ The Lambda function for your skill has now been created. Now you need to attach 
 26. Click **Add.**
 27. Click **Save**.
 
-<a name="uploadzip"></a>Next, we will upload the Riddle Game skill code into Lambda. You should now see details of your riddleGameWorkshop Lambda function that includes your function&#39;s ARN in the upper right and the Configuration view of your function.
+<a name="uploadzip"></a>Next, we will [upload](#uploadzip) the Riddle Game skill code into Lambda. You should now see details of your riddleGameWorkshop Lambda function that includes your function&#39;s ARN in the upper right and the Configuration view of your function.
 
 28. Click on the **riddleGameWorkshop** part of the tree in the **Designer** view.
 29. Scroll down to see the **Function code** view.
