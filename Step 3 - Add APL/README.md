@@ -1,15 +1,16 @@
 # Add Displays with the Alexa Presentation Language 
 
-In this section of the workshop, you will create and configure a skill using the Alexa Skills Kit SDK in NodeJS and AWS Lambda. When launched, this Alexa skill will have the customer interact with a Riddle Game skill that features a simple voice interaction.
+In this section of the workshop, you will incorporate in-skill purchasing (ISP) into your skill. When developers and content creators build delightful skills with compelling content, customers win. With in-skill purchasing, you can sell premium content to enrich your Alexa skill experience.
+
+When a customer plays through your Riddle Game, they have the option to purchase the ability to ask for a hint. When the customer successfully completes the in-skill purchase, they can ask for up to three hints per riddle.
 
 ## Objectives
 
 After completing this workshop, you will be able to:
 
-- Create an Amazon Developer account.
-- Create and configure a new skill using the Alexa Skills Kit and AWS Lambda
-- Create and configure Intents and Sample Utterances
-- Test a skill using Lambda and an Echo device.
+- Set up an ISP entitlement in the developer console
+- Configure your interaction model to handle ISP
+- Update your Lambda service code to be able to handle the various requests from the purchase flow
 
 ## Prerequisites
 
@@ -17,111 +18,273 @@ This lab requires:
 
 - Access to a notebook computer with Wi-Fi, running Microsoft Windows, Mac OSX, or Linux (Ubuntu, SuSE, or RedHat).
 - An Internet browser suchas Chrome, Firefox, or IE9 (previous versions of Internet Explorer are not supported).
+- Having completed **[Step 0: Initialize Riddle Game](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%200%20-%20Initialize%20Riddle%20Game)**
+- Having completed **[Step 1: Add Advanced Voice Design](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%201%20-%20Add%20Advanced%20Voice%20Design)**
+- Having completed **[Step 2: Add In-Skill Purchasing](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%202%20-%20Add%20ISP)**
 
-## Goal: Completing a voice-only Riddle Game.
-Alexa is the voice service that powers Amazon Echo. Alexa provides capabilities, called skills, which enable customers to interact with devices using voice (answer questions, play music, and more).
+## Goal: Integrating Premium Features into your skill
+ISP supports one-time purchases for entitlements that unlock access to features or content in your skill, subscriptions that offer access to premium features or content for a period of time, and consumables which can be purchased, depleted and purchased again.
 
-The Alexa Skills Kit (ASK) is a collection of self-service APIs, tools, documentation, and code samples that make it easy for you to develop your own Alexa skills, which you can then publish. ASK supports simple command-oriented skills, such as &quot;Alexa, ask Greeter to say hello world&quot; as well as sophisticated multi-command dialogs and parameter passing, such as &quot;Alexa, what is this weekend&#39;s weather forecast?&quot; The Alexa Skills Kit is a low-friction way to learn to build for voice.
+You can define your premium offering and price, and we handle the voice-first purchasing flow. We also provide self-service tools to manage your in-skill products, and optimize their sales performance over time. Today, you can make money through both ISP and Alexa Developer Rewards. This feature is available for Alexa skills in the US.
 
-This task will walk you through creating a simple skill that quizzes the customer through Easy, Medium and Hard riddles. Through this you will use the Alexa skills kit to learn the fundamentals of building a voice user experience.
+### Task 3.1: Add displays to your LaunchRequest
 
-### Task 1.1: Create an Account on developer.amazon.com (or Sign In)
+We will now add some displays written in the Alexa Presentation Language to your skill&#39;s LaunchRequest. The LaunchRequest is the function that is called when a user invokes your skill without an utterance, just the invocation name (for example, &quot;Alexa open [hello world]&quot;).
 
-1. Navigate to the Amazon Developer Portal at[https://developer.amazon.com/alexa](https://developer.amazon.com/alexa).
-2. Click **Sign In** in the upper right to create a free account.
+1. In the **developer portal** , select the **Build** tab in the top menu.
+2. Scroll down and select the **Display** tab on the left menu.
+3. This will navigate you to the **APL Authoring Tool**. This is an authoring tool used to create and edit APL documents for your skill. There are currently 7 sample templates you can use. For now, we will start from scratch. Select **Start from scratch**.
+4. In the top pane, you can toggle between different devices. Select **Small Hub**.
+5. Select the **toggle** in the middle of the authoring tool. This should switch views to the raw code. You should see this APL code in the editor:
 
-### Task 1.2: Create the Hello World Skill
+```
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "items": []
+    }
+}
+```
+APL is made up of Components dictated in the mainTemplate. A component is a primitive element that displays on the viewport of the device.
 
-1. When signed in, click **Your Alexa Dashboards** in the upper right.
-2. Choose **Get Started** under Alexa Skills Kit. Alexa Skills Kit will enable you to add new skills to Alexa. (The other option, Alexa Voice Services, is what you use if you want to put Alexa onto other devices such as a Raspberry Pi.)
-3. To start the process of creating a skill, click the **Create Skill** button on the right.
+6. Under items, **add** a **Container** component. This component can contain and orient child components.
 
-### Task 1.3: Skill Information
+```
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "items": [
+            {
+                "type": "Container",
+                "width": "100vw",
+                "height": "100vh",
+                "items": []
+            }
+        ]
+    }
+}
+```
+This Container currently has a width 100% of the viewport width (100vw) and 100% of the viewport height (100vh).
 
-1. Skill Name:enter **Riddle Game Workshop**.
-2. Skill Type: Select **Custom Interaction Model**.
-3. Language: Select **English (U.S.).**
-4. Invocation Name: **riddle game workshop**. This will be the name that you will use to start your skill (eg.,&quot;Alexa, Open _[hello world__]_&quot;.) The invocation name you choose needs to be more than one word and not contain a brand name. Remember the invocation name for future use in this lab.
-5. Click **Create Skill**.
-6. Select the **Start from scratch** template.
-7. Click **Choose**.
+7. Add a child component to the Container. **Insert** a **Text** component that reads &quot;Hello, World!&quot;.
 
-### Task 1.4: Interaction Model
+```
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "items": [
+            {
+                "type": "Container",
+                "width": "100vw",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Text",
+                        "text": "Hello, World!"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
 
-1. In the navigation menu on the left, choose **JSON Editor**.
-2. **Copy** the JSON from [the en-US language model](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%200%20-%20Initialize%20Riddle%20Game/models/en-US.json).
+You will now see a cut-off &quot;Hello, World!&quot; appear on screen. The text is currently cut off on the round hub, because the Container view defaults to a square, versus a circle.
 
-Each of these JSON fields are **Intents**. Intents represent what your skill can do, they are an action Alexa will take. To prompt Alexa for the action, a user would say an **Utterance**. In the case of the **CancelIntent** , the **Utterance** a user would say to perform the cancel action would be &quot;cancel riddles game workshop&quot;.
+8. **Align** the text to be in the center of the screen. **Set** the **height** of the Text component to 100vh and the **width** of the Text component to 100vw. **Add the properties** _textAlign: center_ and _textAlignVertical: center_ to the Text component.
 
-Some of the utterances include **Slots**. These are items that are variable to what the user says. In the context of this skill, there are two slot types. The first is `levelType` which defines a level a user could select. The second is `answerType`, which defines the  correct answers a customer could say to the give riddle. Each slot has synonyms associated to it, which are resolved in the skill code through **Entity Resolution**.
+```
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "items": [
+            {
+                "type": "Container",
+                "width": "100vw",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Text",
+                        "text": "Hello, World!",
+                        "height": "100vh",
+                        "width": "100vw",
+                        "textAlign": "center",
+                        "textAlignVertical": "center"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+Now you can see the Text in the center of the screen vertically and horizontally.
 
-This skill is relatively basic thus far, so our intent model just uses the default built-in intents for Help and Stop/Cancel.
+9. **Toggle** in between the various devices. If you click on Medium Hub, Large Hub, and Extra-Large TV in the authoring tool, you can see the same experience on every device.
 
-3. Click the **Save Model** button. This will start the process of creating your interaction (If you did not make changes in the Code Editor the **Save Model** button is gray).
-4. Click on **Build Model.**
-8. We&#39;re now done with the Interaction Model. Choose **Enpoints** in the left menu.
+Now that we have a visual experience that fits for every device, lets change the customer experience to be different for any devices that are NOT round. This will be utilizing the built-in **viewport properties** that specifies device characteristics like size, shape, and orientation.
 
-### Task 1.5: Configuration
+10. Select **Medium Hub**.
+11. In the Text component, add a **when** statement. The when statement uses data-binding to show or hide the component it is attached to based upon the condition specified. This condition should be &quot;if the viewport shape is round&quot;.
 
-Your skill needs to be connected to an endpoint that will perform your skill logic. We will be using AWS Lambda for this lab. We will create the Riddle Game Workshop skill Lambda function, copy its ARN (Amazon Resource Name), and paste it into your skill&#39;s configuration page.
+```
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "items": [
+            {
+                "type": "Container",
+                "width": "100vw",
+                "height": "100vh",
+                "items": [
+                    {
+                        "when": "${viewport.shape == 'round'}",
+                        "type": "Text",
+                        "text": "Hello, World!",
+                        "height": "100vh",
+                        "width": "100vw",
+                        "textAlign": "center",
+                        "textAlignVertical": "center"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+Now the text component will only show on any hubs that are round. So, if you **toggle** back to the **Small Hub,** you should see the &quot;Hello, World!&quot; text.
 
-1. In a new browser tab, go to [http://aws.amazon.com](http://aws.amazon.com/)
-2. **Sign in** to the management console.
-3. From the region selector in the upper right, be sure that you&#39;re in the **US East (N. Virginia)** region.
-4. From the Services menu on the left of the top menu bar, choose **Services | Compute | Lambda**.
-5. Click the orange **Create Function** button in the upper right.
-6. Assure that **Author from scratch** is toggled.
-7. Name: **riddleGameWorkshop**
-8. Runtime: NodeJS 8.10
-9. Role: **Create a new role from one or more template(s)**
-10. Role name: **riddleGameWorkshopRole**
-11. Policy templates: **Simple microservice permissions**
-12. Click the orange **Create function** in the lower right.
+12. Under the Text component, **add** a similar **Text** component with the when condition of &quot;if the viewport&#39;s shape is not round&quot;. **Set** the color of this component to **red**.
 
-The Lambda function for your skill has now been created. Now you need to attach your skill to it.
+```
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "items": [
+            {
+                "type": "Container",
+                "width": "100vw",
+                "height": "100vh",
+                "items": [
+                    {
+                        "when": "${viewport.shape == 'round'}",
+                        "type": "Text",
+                        "text": "Hello, World!",
+                        "height": "100vh",
+                        "width": "100vw",
+                        "textAlign": "center",
+                        "textAlignVertical": "center"
+                    },
+                    {
+                        "when": "${viewport.shape != 'round'}",
+                        "type": "Text",
+                        "text": "Hello, World!",
+                        "height": "100vh",
+                        "width": "100vw",
+                        "textAlign": "center",
+                        "textAlignVertical": "center",
+                        "color": "red"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+Now **toggling** between the different devices, you can see a red &quot;Hello, World!&quot; for any landscape devices, and a white &quot;Hello, World!&quot; for round devices.
 
-14. In the **Designer** view, under **Add Triggers** , select **Alexa Skills Kit**
-15. In the upper-right corner of the page, **copy your ARN**. Copy everything except &quot;ARN-&quot;. It will look like this:
-`arn:aws:lambda:us-east-1:123456789012:function:riddleGameWorkshop`
-16. Now **switch browser tabs back to your skill** in the developer portal. You should be on the configuration page. (If you closed the browser tab, here&#39;s how to get back: Go to  [http://developer.amazon.com](http://developer.amazon.com/), sign in, click Alexa, click Alexa Skills Kit, click on your skill name, click on configuration from the left-hand menu).
-17. Select **Endpoint** from the left menu.
-18. For the service endpoint type, choose the **AWS Lambda ARN (Amazon Resource Name)** radio button.
-19. **Paste your Lambda ARN** into the Default text field.
-20. Click **Save Endpoints**.
-21. Copy your skill ID.
-22. Navigate back to your **Lambda function tab**. **Click** on the **Alexa Skills Kit** trigger that we previously added in the **Designer** view (it should say &quot;Configuration Required&quot; underneath).
-23. Scroll down to the **Configure Triggers** view.
-24. Skill id verification: **Enabled**
-25. **Paste** your skill id.
-26. Click **Add.**
-27. Click **Save**.
+We have finished authoring our display screen for our skill, we now need to add this APL code to our skill.
 
-Next, we will upload the Riddle Game skill code into Lambda. You should now see details of your riddleGameWorkshop Lambda function that includes your function&#39;s ARN in the upper right and the Configuration view of your function.
+13. **Copy** the entire APL code.
+14. **Now switch browser tabs** back to your Lambda function code.
+15. Assure you have selected the **helloWorldSkill** function under the **Designer** view and scroll down to the **Function code**
+16. Select **File -\&gt; New File**
+17. **Paste** the APL code.
+18. Select **File -\&gt; Save As** and name this file **main.json.** Assure it is being saved under the **helloWorldSkill**
+19. Once main.json is saved, you should see it appear in the navigation view on the left. **Select** js.
+20. **Navigate** to the **LaunchRequest** (line 6).
 
-28. Click on the **riddleGameWorkshop** part of the tree in the **Designer** view.
-29. Scroll down to see the **Function code** view.
-30. Code Entry Type: **Upload a .zip file**
-31. Ensure **Node.js 8.10** is selected for **Runtime**
-32. Handler: **index.handler**.
-33. Function Package: **Upload** a .zip of the contents in the lambda/custom folder of this repo.
-34. Click the **Save** button in the top of the page. This will upload your function code into the Lambda container.
+We will now add an APL directive to the LaunchRequest response. A directive specifies how a compiler (or other translator) should process its input. In this case, our directive type will be `Alexa.Presentation.APL.RenderDocument`, indicating to interpret the input as a document to render as APL, and our input will be our main.json document.
 
-After the Save is complete, you should see your code editor inline (Note, if your function code becomes large, this view will not be available after uploading, but will still run). 
+21. **Add** an if statement to determine if the customer&#39;s device has a display using the **supportsAPL** function. The current return statement should be in the else of that statement (line 13).
 
-### Task 1.6: Test your voice interaction
+```
+    if(supportsAPL(handlerInput)) {
 
-We&#39;ll now test your skill in the Developer Portal. You can also optionally test your skill in AWS Lambda using the JSON Input from the testing console.
+    } else {
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(speechText)
+        .withSimpleCard('Hello World', speechText)
+        .getResponse();
+    }
 
-1. Switch browser tabs to **the developer portal** (If you closed the browser tab, here&#39;s how to get back: Go to  [http://developer.amazon.com](http://developer.amazon.com/), sign in, click Alexa, click Alexa Skills Kit, click on your skill name, click on configuration from the left-hand menu).
-2. Scroll to the top of the page and click **Test**.
-3. Switch **Test is disabled for this skill** to Development.
-4. In **Alexa Simulator** tab, under **Type or click…**, type &quot;open riddle game workshop&quot;
-5. You should hear and see Alexa respond with the message in your LaunchRequest.
+```
+22. In the if statement, **paste** the following code:
+
+```
+return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .withSimpleCard('Hello World', speechText)
+      .addDirective({
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          document: require('./main.json')
+        })
+      .getResponse();
+
+```
+23. Click **Save** at the top of the window **.**
+
+### Task 3.5: Test that the ISP works in your skill
+
+We will now test our skill again to assure that the ISP flow works and that our hints are accessible ONLY after a purchase flow is successful. As always, you can test your skill in the Developer Portal or in Lambda using the JSON Input from the testing console.
+
+1. Navigate to the **Test** tab of the Developer Portal.
+2. In **Alexa Simulator** tab, under **Type or click…**, type &quot;open riddle game workshop&quot;
+3. You should hear and see Alexa respond with the message in your LaunchRequest. Now type "i want three easy riddles".
+4. When Alexa is done reading off the first riddle, respond with "i need a hint". **Assure that she asks you if you want to purchase hints.**
+5. She should respond with "You don't currently own the hint pack. Want to learn more about it?". Type "yes".
+6. She should now read your **entitlement description**. Respond "yes" to buy it.
+7. Now that you have purchased a hint pack, we can start a new game with hints! Say "i want three easy riddles" and assure you can ask for hints throughout the game.
 
 
-
-
-### Congratulations! You have finished section 0!
+### Congratulations! You have finished Task 3!
 
 
 ## License
