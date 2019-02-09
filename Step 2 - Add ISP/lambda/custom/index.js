@@ -199,30 +199,165 @@ const HintIntentHandler = {
       && handlerInput.requestEnvelope.request.intent.name === 'HintIntent';
   },
   handle(handlerInput) {
-    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-    const index = sessionAttributes.currentHintIndex;
+    const locale = handlerInput.requestEnvelope.request.locale;
+    const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
 
-    // Read all hints the customer has asked for thus far
-    let speechText = "Okay, here are your hints: ";
-    let i = 0;
-    while (i <= index) {
-      speechText += sessionAttributes.currentRiddle.hints[i] + ", ";
-      i++;
-    }
-    speechText += ". Here is your question again: "
-        + sessionAttributes.currentRiddle.question;
+    // Determine if the customer has purchased the hint_pack
+    return ms.getInSkillProducts(locale).then(function(res) {
+      var product = res.inSkillProducts.filter(record => record.referenceName == 'hint_pack');
+      
+      if (isEntitled(product)) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const index = sessionAttributes.currentHintIndex;
 
-    // Update the current hint index, maximum of 3 hints per riddle
-    sessionAttributes.currentHintIndex = index == 2 ? 2 : (index + 1);
-    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        // Read all hints the customer has asked for thus far
+        let speechText = "Okay, here are your hints: ";
+        let i = 0;
+        while (i <= index) {
+          speechText += sessionAttributes.currentRiddle.hints[i] + ", ";
+          i++;
+        }
+        speechText += ". Here is your question again: "
+            + sessionAttributes.currentRiddle.question;
 
-    return handlerInput.responseBuilder
-      .speak(speechText)
-      .reprompt(sessionAttributes.currentRiddle.question)
-      .withSimpleCard('Level Up Riddles', speechText)
-      .getResponse();
+        // Update the current hint index, maximum of 3 hints per riddle
+        sessionAttributes.currentHintIndex = index == 2 ? 2 : (index + 1);
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+        return handlerInput.responseBuilder
+          .speak(speechText)
+          .reprompt(sessionAttributes.currentRiddle.question)
+          .withSimpleCard('Level Up Riddles', speechText)
+          .getResponse();
+      } else {
+        const upsellMessage = "You don't currently own the hint pack. Want to learn more about it?";
+                    
+        return handlerInput.responseBuilder
+          .addDirective({
+            'type': 'Connections.SendRequest',
+            'name': 'Upsell',
+            'payload': {
+              'InSkillProduct': {
+                'productId': product[0].productId
+              },
+              'upsellMessage': upsellMessage
+            },
+            'token': 'correlationToken'
+          })
+          .getResponse();
+      }
+    });
   }
 };
+
+const BuyIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+        handlerInput.requestEnvelope.request.intent.name === 'BuyIntent';
+  },
+  handle(handlerInput) {  
+    // Inform the user about what products are available for purchase
+    const locale = handlerInput.requestEnvelope.request.locale;
+    const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+
+    return ms.getInSkillProducts(locale).then(function(res) {
+      let product = res.inSkillProducts.filter(record => record.referenceName == "hint_pack");
+
+      return handlerInput.responseBuilder
+        .addDirective({
+          'type': 'Connections.SendRequest',
+          'name': 'Buy',
+          'payload': {
+            'InSkillProduct': {
+              'productId': product[0].productId
+            }
+          },
+          'token': 'correlationToken'
+        })
+        .getResponse();
+    });
+  }
+};
+
+const UpsellResponseHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === "Connections.Response" &&
+        handlerInput.requestEnvelope.request.name === "Upsell";
+  },
+  handle(handlerInput) {
+    if (handlerInput.requestEnvelope.request.status.code == 200) {
+      let speechOutput = "";
+      let reprompt = "";
+
+      if (handlerInput.requestEnvelope.request.payload.purchaseResult == 'ACCEPTED') {
+        speechOutput = "You can now ask for hints in your game! To get a hint, say, i want a hint.";
+        reprompt = "Let's play a new game with hints! Would you like to start with easy, medium, or hard riddles?";
+      } else if (handlerInput.requestEnvelope.request.payload.purchaseResult == 'DECLINED') {
+        speechOutput = "Okay. I can't offer you any hints at this time. ";
+        reprompt = "Let's play a game. Would you like to start with easy, medium, or hard riddles?";
+      }
+
+      return handlerInput.responseBuilder
+        .speak(speechOutput + reprompt)
+        .reprompt(reprompt)
+        .getResponse();
+    } else {
+      // Something has failed with the connection.
+      console.log('Connections.Response indicated failure. error:' + handlerInput.requestEnvelope.request.status.message); 
+      return handlerInput.responseBuilder
+        .speak("There was an error handling your purchase request. Please try again or contact us for help.")
+        .getResponse();
+    }
+  }
+};
+
+const BuyResponseHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === "Connections.Response" &&
+        handlerInput.requestEnvelope.request.name === "Buy";
+  },
+  handle(handlerInput) {
+    const locale = handlerInput.requestEnvelope.request.locale;
+    const ms = handlerInput.serviceClientFactory.getMonetizationServiceClient();
+    const productId = handlerInput.requestEnvelope.request.payload.productId;
+
+    return ms.getInSkillProducts(locale).then(function(res) {
+      let product = res.inSkillProducts.filter(record => record.productId == productId);
+      let speechOutput = "";
+      let reprompt = "";
+
+      if (handlerInput.requestEnvelope.request.status.code == 200) {
+        if (handlerInput.requestEnvelope.request.payload.purchaseResult == 'ACCEPTED') {
+          speechOutput = "You can now ask for hints in your game! To get a hint, say, i want a hint.";
+          reprompt = "Let's play a new game with hints! Would you like to start with easy, medium, or hard riddles?";
+        } else if (handlerInput.requestEnvelope.request.payload.purchaseResult == 'DECLINED') {
+          speechOutput = "Thanks for your interest in the " + product[0].name + ". ";
+          reprompt = "Let's play a game. Would you like to start with easy, medium, or hard riddles?";
+        }
+
+        return handlerInput.responseBuilder
+          .speak(speechOutput + reprompt)
+          .reprompt(reprompt)
+          .getResponse();
+      } else {
+        // Something has failed with the connection.
+        console.log('Connections.Response indicated failure. error:' + handlerInput.requestEnvelope.request.status.message);
+        return handlerInput.responseBuilder
+          .speak("There was an error handling your purchase request. Please try again or contact us for help.")
+          .getResponse();
+      }
+    });
+  }
+};
+
+function isProduct(product) {
+  return product && product.length > 0;
+}
+
+function isEntitled(product) {
+  return isProduct(product) && product[0].entitled == 'ENTITLED';
+}
+
 
 const skillBuilder = Alexa.SkillBuilders.custom();
 
@@ -233,6 +368,9 @@ exports.handler = skillBuilder
     AnswerRiddleIntentHandler,
     HelpIntentHandler,
     HintIntentHandler,
+    BuyIntentHandler,
+    UpsellResponseHandler,
+    BuyResponseHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
   )

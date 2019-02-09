@@ -160,6 +160,20 @@
                         "give me a clue",
                         "tell me a clue"
                     ]
+                },
+                {
+                    "name": "BuyIntent",
+                    "slots": [],
+                    "samples": [
+                        "buy hints",
+                        "i want to buy hints",
+                        "buy hints for my game",
+                        "buy me hints",
+                        "purchase hints",
+                        "purchase clues",
+                        "buy clues",
+                        "buy clues for my game"
+                    ]
                 }
             ],
             "types": [
