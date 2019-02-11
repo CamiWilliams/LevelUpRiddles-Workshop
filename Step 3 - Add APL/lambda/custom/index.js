@@ -129,8 +129,6 @@ const AnswerRiddleIntentHandler = {
   }
 };
 
-
-
 const HelpIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'

@@ -1,16 +1,19 @@
 # Add Displays with the Alexa Presentation Language 
 
-In this section of the workshop, you will incorporate in-skill purchasing (ISP) into your skill. When developers and content creators build delightful skills with compelling content, customers win. With in-skill purchasing, you can sell premium content to enrich your Alexa skill experience.
+The Alexa Presentation Language (APL) is Amazon’s new voice-first design language you can use to create rich, interactive displays for Alexa skills and tailor the experience for tens of millions of Alexa-enabled devices. Using APL, you can easily build customized, robust displays that coincide with your personal brand and the context of your voice experience.
 
-When a customer plays through your Riddle Game, they have the option to purchase the ability to ask for a hint. When the customer successfully completes the in-skill purchase, they can ask for up to three hints per riddle.
+In this workshop, you will enhance the customer's interaction with Riddle Game by incorporating displays using APL. These displays will handle user interactions alongside voice.
 
 ## Objectives
 
 After completing this workshop, you will be able to:
 
-- Set up an ISP entitlement in the developer console
-- Configure your interaction model to handle ISP
-- Update your Lambda service code to be able to handle the various requests from the purchase flow
+- Create APL documents for your intents
+- Make your displays dynamic via your voice datasource
+- Utilize transformers to use voice-visual components
+- Send events from your display to your voice service
+- Handle display user events in your voice service
+
 
 ## Prerequisites
 
@@ -22,14 +25,16 @@ This lab requires:
 - Having completed **[Step 1: Add Advanced Voice Design](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%201%20-%20Add%20Advanced%20Voice%20Design)**
 - Having completed **[Step 2: Add In-Skill Purchasing](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/tree/master/Step%202%20-%20Add%20ISP)**
 
-## Goal: Integrating Premium Features into your skill
-ISP supports one-time purchases for entitlements that unlock access to features or content in your skill, subscriptions that offer access to premium features or content for a period of time, and consumables which can be purchased, depleted and purchased again.
+## Goal: Create an enriching visual experience in your skill
+Voice is the most natural form of interaction. But in a voice-first world, visuals can enhance interactions with Alexa-enabled devices. By combining visual elements with voice experiences, developers can expand the possibilities of what their skills can do. Alexa-enabled devices have varying display sizes and shapes, purposes, and hardware limitations. For example, while using a skill on an Echo Spot or Fire TV may have similar spoken interactions for a customer, interactivity and information rendered on the screen may vary drastically depending on the device features.
 
-You can define your premium offering and price, and we handle the voice-first purchasing flow. We also provide self-service tools to manage your in-skill products, and optimize their sales performance over time. Today, you can make money through both ISP and Alexa Developer Rewards. This feature is available for Alexa skills in the US.
+You will create 4 display screens: one for the `LaunchRequest`, `PlayGameIntent`, `AnswerRiddleIntent`, and `HintIntent`. 
 
-### Task 3.1: Add displays to your LaunchRequest
+### Task 3.1: Add displays to your LaunchRequest that send UserEvents 
 
-We will now add some displays written in the Alexa Presentation Language to your skill&#39;s LaunchRequest. The LaunchRequest is the function that is called when a user invokes your skill without an utterance, just the invocation name (for example, &quot;Alexa open [hello world]&quot;).
+We will now add some displays to your skill's `LaunchRequest`. The LaunchRequest is the function that is called when a user invokes your skill without an utterance, just the invocation name (for example, "Alexa open riddle game").
+
+When the customer invokes your skill and the `LaunchRequest`, Alexa prompts the user _"Would you like to start with easy, medium, or hard riddles?"_ We want to create a display with buttons that a customer can select to chose their level. 
 
 1. In the **developer portal** , select the **Build** tab in the top menu.
 2. Scroll down and select the **Display** tab on the left menu.
@@ -271,6 +276,10 @@ return handlerInput.responseBuilder
 ```
 23. Click **Save** at the top of the window **.**
 
+### Task 3.2: Add displays for the game play contingent on the skill datasource
+
+### Task 3.3: Integrate transformers into your displays for a voice-first visual experience 
+
 ### Task 3.5: Test that the ISP works in your skill
 
 We will now test our skill again to assure that the ISP flow works and that our hints are accessible ONLY after a purchase flow is successful. As always, you can test your skill in the Developer Portal or in Lambda using the JSON Input from the testing console.
@@ -282,6 +291,9 @@ We will now test our skill again to assure that the ISP flow works and that our 
 5. She should respond with "You don't currently own the hint pack. Want to learn more about it?". Type "yes".
 6. She should now read your **entitlement description**. Respond "yes" to buy it.
 7. Now that you have purchased a hint pack, we can start a new game with hints! Say "i want three easy riddles" and assure you can ask for hints throughout the game.
+
+### Task 3.6 (Extra Credit): Update your displays to use the customer's favorite color
+
 
 
 ### Congratulations! You have finished Task 3!
