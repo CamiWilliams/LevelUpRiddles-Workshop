@@ -13,7 +13,14 @@ const LaunchRequestHandler = {
         + " What is your name and favorite color?"
         + " How many riddles would you like to play with?"
         + " Would you like to start with easy, medium, or hard riddles?";
- 
+
+    if (supportsAPL(handlerInput)) {
+      handlerInput.responseBuilder
+        .addDirective({
+            type: 'Alexa.Presentation.APL.RenderDocument',
+            document: require('./launchrequest.json')
+          });
+    }
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
@@ -25,30 +32,43 @@ const LaunchRequestHandler = {
 const PlayGameIntentHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-      && handlerInput.requestEnvelope.request.intent.name === 'PlayGameIntent';
+      && handlerInput.requestEnvelope.request.intent.name === 'PlayGameIntent'
+      || handlerInput.requestEnvelope.request.type === 'Alexa.Presentation.APL.UserEvent';
   },
   handle(handlerInput) {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     const request = handlerInput.requestEnvelope.request;
 
     // Get the level the customer selected: 'easy', 'med', 'hard'
-    sessionAttributes.currentLevel = request.intent.slots.level.value;
+    if (request.type === 'Alexa.Presentation.APL.UserEvent') {
+      if (request.arguments[0] === 'Easy') {
+        sessionAttributes.currentLevel = "easy"
+      } else if (request.arguments[0] === 'Medium') {
+        sessionAttributes.currentLevel = "medium"
+      } else {
+        sessionAttributes.currentLevel = "hard"
+      }
 
-    // Store the slot values for name and color
-    if (request.intent.slots.name.value) {
-      sessionAttributes.name = request.intent.slots.name.value;
-    }
-
-    if (request.intent.slots.color.value) {
-      sessionAttributes.color = request.intent.slots.color.value;
-    }
-
-    // Check if the slot value for riddleNum is filled and <5, otherwise default to 5
-    const riddleNum = request.intent.slots.riddleNum.value;
-    if (riddleNum) {
-      sessionAttributes.totalRids = riddleNum <= 5 ? riddleNum : 5;
-    } else {
       sessionAttributes.totalRids = 5;
+    } else {
+      sessionAttributes.currentLevel = request.intent.slots.level.value;
+
+      // Store the slot values for name and color
+      if (request.intent.slots.name.value) {
+        sessionAttributes.name = request.intent.slots.name.value;
+      }
+
+      if (request.intent.slots.color.value) {
+        sessionAttributes.color = request.intent.slots.color.value;
+      }
+
+      // Check if the slot value for riddleNum is filled and <5, otherwise default to 5
+      const riddleNum = request.intent.slots.riddleNum.value;
+      if (riddleNum) {
+        sessionAttributes.totalRids = riddleNum <= 5 ? riddleNum : 5;
+      } else {
+        sessionAttributes.totalRids = 5;
+      }
     }
 
     // Reset variables to 0 to start the new game
@@ -64,6 +84,14 @@ const PlayGameIntentHandler = {
         + " First riddle: " + sessionAttributes.currentRiddle.question;
 
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+    if (supportsAPL(handlerInput)) {
+      handlerInput.responseBuilder
+        .addDirective({
+            type: 'Alexa.Presentation.APL.RenderDocument',
+            document: require('./riddle.json')
+          });
+    }
 
     return handlerInput.responseBuilder
       .speak(sessionAttributes.speechText)
@@ -111,9 +139,25 @@ const AnswerRiddleIntentHandler = {
       sessionAttributes.currentRiddle = {};
       sessionAttributes.currentIndex = 0;
       sessionAttributes.totalRids = 5;
+
+      if (supportsAPL(handlerInput)) {
+        handlerInput.responseBuilder
+          .addDirective({
+            type: 'Alexa.Presentation.APL.RenderDocument',
+            document: require('./finishedgame.json')
+          });
+      }
     } else {
       sessionAttributes.currentRiddle = RIDDLES.LEVELS[sessionAttributes.currentLevel][sessionAttributes.currentIndex];
       sessionAttributes.speechText += "Next riddle: " + sessionAttributes.currentRiddle.question;
+    
+      if (supportsAPL(handlerInput)) {
+        handlerInput.responseBuilder
+          .addDirective({
+              type: 'Alexa.Presentation.APL.RenderDocument',
+              document: require('./riddle.json')
+            });
+      }
     }
     
     // Reset hint index for the new question
@@ -221,6 +265,14 @@ const HintIntentHandler = {
         // Update the current hint index, maximum of 3 hints per riddle
         sessionAttributes.currentHintIndex = index == 2 ? 2 : (index + 1);
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+        if (supportsAPL(handlerInput)) {
+          handlerInput.responseBuilder
+            .addDirective({
+              type: 'Alexa.Presentation.APL.RenderDocument',
+              document: require('./hint.json')
+            });
+        }
 
         return handlerInput.responseBuilder
           .speak(speechText)
@@ -354,6 +406,17 @@ function isProduct(product) {
 
 function isEntitled(product) {
   return isProduct(product) && product[0].entitled == 'ENTITLED';
+}
+
+//----------------------------------------------------------------------
+//-----------------------------APL HELPER-------------------------------
+//----------------------------------------------------------------------
+
+function supportsAPL(handlerInput) {
+    const supportedInterfaces =
+        handlerInput.requestEnvelope.context.System.device.supportedInterfaces;
+    const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
+    return aplInterface != null && aplInterface != undefined;
 }
 
 
