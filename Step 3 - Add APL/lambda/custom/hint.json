@@ -56,8 +56,7 @@
                     },
                     {
                         "type": "Text",
-                        "text": "${payload.riddleGameData.properties.currentHintText}",
-                        "speech": "${payload.riddleGameData.properties.currentHintSpeech}",
+                        "text": "${payload.riddleGameData.properties.currentHint}",
                         "width": "100vw",
                         "color": "@myWhite",
                         "fontWeight": "300",
@@ -68,7 +67,7 @@
                         "textAlign": "center"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Easy'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'easy'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "20vh",
@@ -77,7 +76,7 @@
                         "top": "80vh"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Medium'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'medium'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "20vh",
@@ -86,7 +85,7 @@
                         "top": "80vh"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Hard'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'hard'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "20vh",

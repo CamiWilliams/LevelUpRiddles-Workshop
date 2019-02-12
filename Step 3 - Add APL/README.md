@@ -773,9 +773,79 @@ if (supportsAPL(handlerInput)) {
 ```
 We have successfully added logic to send dynamic skill information to our APL documents.
 
-
 ### Task 3.5: Integrate transformers into your displays for a voice-first visual experience
+A great way to marry your voice output to your visual output is through [Commands](https://developer.amazon.com/docs/alexa-presentation-language/apl-standard-commands.html). It will allow for a more seamless experience for your customer to quickly gain information from the display.
 
+In our skill, we will be using the [SpeakItem](https://developer.amazon.com/docs/alexa-presentation-language/apl-standard-commands.html#speakitem-command). This command allows the text appearing on screen to be highlighted as Alexa reads it. We will add this command to the Riddle being read.
+
+For us to integrate this command into our skill, we will need to use transformers in our datasource. Transformers take a simple string and transform it to another object. In our case, we will be **adding an `ssmlToSpeech` and an `ssmlToText`** transformer.
+
+1. Look at the `Text` component in `riddle.json`. You will notice that it contains both `text` and `speech` properties.
+2. **Navigate** to the `createDatasource` helper function
+3. At the same level of `properties`, **add** a `transformer` JSON object.
+
+```
+return {
+  "riddleGameData": {
+      "properties": {
+          ...
+       },
+       "transformers" : []
+  }
+};
+```
+
+4. **Add** 2 transformers, one to convert SSML to speech and one to convert SSML to text.
+
+```
+"transformers": [
+    {
+        "inputPath": "currentQuestionSsml",
+        "outputName": "currentQuestionSpeech",
+        "transformer": "ssmlToSpeech"
+    },
+    {
+        "inputPath": "currentQuestionSsml",
+        "outputName": "currentQuestionText",
+        "transformer": "ssmlToText"
+    }
+]
+```
+
+Alongside the transformer in the datasource and the directive, we also need to send a **Command directive** that will define it is a SpeakItem command.
+
+5. In `index.js`, for any occurence of the directive sending `riddle.json`, **send** an `ExecuteCommand` directive with `SpeakItem`. Assure that the tokens for both directives match:
+
+```
+if (supportsAPL(handlerInput)) {
+    let data = createDatasource.call(this, sessionAttributes);
+    handlerInput.responseBuilder
+      .addDirective({
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          token: 'riddleToken',
+          document: require('./riddle.json'),
+          'datasources': data
+      })
+      .addDirective({
+        type: 'Alexa.Presentation.APL.ExecuteCommands',
+        token: 'riddleToken',
+        commands: [
+          {
+            type: 'SpeakItem',
+            componentId: 'riddleComp',
+            highlightMode: 'line'
+          }
+        ]
+      });
+}
+```
+
+In order to assure Alexa doesn't repeat herself from this command, we need to **delete** reading the riddle and the hint from our speech output.
+
+6. In `PlayGameIntent`, delete the riddle being read from the `.speech` but **NOT** `.reprompt` for **ONLY** the visual experience.
+7. In `AnswerRiddleIntent`, delete the riddle being read from the `.speech` but **NOT** `.reprompt` for **ONLY** the visual experience.
+
+Now we have integrated a voice and visual experience that both complement each other!
 
 
 ### Task 3.6: Test that all the displays appear within your skill
@@ -786,13 +856,16 @@ Now we will experience the full gameplay and assure that each display appears pr
 2. In **Alexa Simulator** tab, under **Type or click…**, type &quot;open riddle game workshop&quot;
 3. You should hear and see Alexa respond with the message in your LaunchRequest. Now type "i want three easy riddles".
 5. Walk through each of the questions and check to see that the screens display the appropriate riddle. You can also ask for hints to assure the correct hint appears.
+  - Note that the SpeakItem command _may not appear in the simulator_, due to the fact that the highlight color defaults to white. You can test on a device where the highlight color will default to Alexa blue!
 6. Finish the game and assure that your score appears correctly.
 
 ### Task 3.7 (Extra Credit): Host your layouts in S3 to reuse in multiple APL documents
 
+Stay tuned!
+
 ### Task 3.8 (Extra Credit): Update your displays to use the customer's favorite color
 
-
+Stay tuned!
 
 ### Congratulations! You have finished Task 3!
 

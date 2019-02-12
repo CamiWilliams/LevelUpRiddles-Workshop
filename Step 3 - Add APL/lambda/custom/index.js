@@ -81,7 +81,7 @@ const PlayGameIntentHandler = {
 
     sessionAttributes.speechText = "Lets play with " 
         + sessionAttributes.currentLevel + " riddles! "
-        + " First riddle: " + sessionAttributes.currentRiddle.question;
+        + " First riddle: ";
 
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
@@ -90,14 +90,28 @@ const PlayGameIntentHandler = {
       handlerInput.responseBuilder
         .addDirective({
             type: 'Alexa.Presentation.APL.RenderDocument',
+            token: 'riddleToken',
             document: require('./riddle.json'),
             'datasources': data
-          });
+        })
+        .addDirective({
+          type: 'Alexa.Presentation.APL.ExecuteCommands',
+          token: 'riddleToken',
+          commands: [
+            {
+              type: 'SpeakItem',
+              componentId: 'riddleComp',
+              highlightMode: 'line'
+            }
+          ]
+        });
+    } else {
+      sessionAttributes.speechText += sessionAttributes.currentRiddle.question;
     }
 
     return handlerInput.responseBuilder
       .speak(sessionAttributes.speechText)
-      .reprompt(sessionAttributes.speechText)
+      .reprompt(sessionAttributes.speechText + sessionAttributes.currentRiddle.question)
       .withSimpleCard('Level Up Riddles', sessionAttributes.speechText)
       .getResponse();
   }
@@ -136,12 +150,6 @@ const AnswerRiddleIntentHandler = {
           + sessionAttributes.correctCount
           + ". To play another level, say easy, medium, or hard. ";
 
-      // Reset variables to start a new game
-      sessionAttributes.currentLevel = "";
-      sessionAttributes.currentRiddle = {};
-      sessionAttributes.currentIndex = 0;
-      sessionAttributes.totalRids = 5;
-
       if (supportsAPL(handlerInput)) {
         let data = createDatasource.call(this, sessionAttributes);
         handlerInput.responseBuilder
@@ -151,9 +159,15 @@ const AnswerRiddleIntentHandler = {
             'datasources': data
           });
       }
+
+      // Reset variables to start a new game
+      sessionAttributes.currentLevel = "";
+      sessionAttributes.currentRiddle = {};
+      sessionAttributes.currentIndex = 0;
+      sessionAttributes.totalRids = 5;
     } else {
       sessionAttributes.currentRiddle = RIDDLES.LEVELS[sessionAttributes.currentLevel][sessionAttributes.currentIndex];
-      sessionAttributes.speechText += "Next riddle: " + sessionAttributes.currentRiddle.question;
+      sessionAttributes.speechText += "Next riddle: ";
     
       if (supportsAPL(handlerInput)) {
         let data = createDatasource.call(this, sessionAttributes);
@@ -161,9 +175,23 @@ const AnswerRiddleIntentHandler = {
         handlerInput.responseBuilder
           .addDirective({
               type: 'Alexa.Presentation.APL.RenderDocument',
+              token: 'riddleToken',
               document: require('./riddle.json'),
               'datasources': data
-            });
+          })
+          .addDirective({
+            type: 'Alexa.Presentation.APL.ExecuteCommands',
+            token: 'riddleToken',
+            commands: [
+              {
+                type: 'SpeakItem',
+                componentId: 'riddleComp',
+                highlightMode: 'line'
+              }
+            ]
+          });
+      } else {
+        sessionAttributes.speechText += sessionAttributes.currentRiddle.question;
       }
     }
     
@@ -279,6 +307,7 @@ const HintIntentHandler = {
           handlerInput.responseBuilder
             .addDirective({
               type: 'Alexa.Presentation.APL.RenderDocument',
+              token: 'hintToken',
               document: require('./hint.json'),
               'datasources': data
             });
@@ -439,10 +468,20 @@ function createDatasource(attributes) {
             "currentLevel": attributes.currentLevel,
             "currentQuestionNumber": (attributes.currentIndex + 1),
             "numCorrect": attributes.correctCount,
-            "currentHintSsml": "<speak>" 
-                + attributes.currentRiddle.hints[attributes.currentHintIndex]
-                + "<speak>",
-        }
+            "currentHint": attributes.currentRiddle.hints[attributes.currentHintIndex]
+        },
+        "transformers": [
+            {
+                "inputPath": "currentQuestionSsml",
+                "outputName": "currentQuestionSpeech",
+                "transformer": "ssmlToSpeech"
+            },
+            {
+                "inputPath": "currentQuestionSsml",
+                "outputName": "currentQuestionText",
+                "transformer": "ssmlToText"
+            }
+        ]
     }
   };
 }

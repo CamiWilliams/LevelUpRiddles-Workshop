@@ -29,7 +29,7 @@
                 "height": "100vh",
                 "items": [
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Easy'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'easy'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "100vh",
@@ -37,7 +37,7 @@
                         "position": "absolute"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Medium'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'medium'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "100vh",
@@ -45,7 +45,7 @@
                         "position": "absolute"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Hard'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'hard'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "100vh",
@@ -73,6 +73,7 @@
                     },
                     {
                         "type": "Text",
+                        "id": "riddleComp",
                         "text": "${payload.riddleGameData.properties.currentQuestionText}",
                         "speech": "${payload.riddleGameData.properties.currentQuestionSpeech}",
                         "width": "100vw",
@@ -85,7 +86,7 @@
                         "textAlign": "center"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Easy'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'easy'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "20vh",
@@ -94,7 +95,7 @@
                         "top": "80vh"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Medium'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'medium'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "20vh",
@@ -103,7 +104,7 @@
                         "top": "80vh"
                     },
                     {
-                        "when": "${payload.riddleGameData.properties.currentLevel == 'Hard'}",
+                        "when": "${payload.riddleGameData.properties.currentLevel == 'hard'}",
                         "type": "Frame",
                         "width": "100vw",
                         "height": "20vh",
