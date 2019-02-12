@@ -73,7 +73,8 @@
                     },
                     {
                         "type": "Text",
-                        "text": "${payload.riddleGameData.properties.currentQuestionSsml}",
+                        "text": "${payload.riddleGameData.properties.currentQuestionText}",
+                        "speech": "${payload.riddleGameData.properties.currentQuestionSpeech}",
                         "width": "100vw",
                         "color": "@myWhite",
                         "fontWeight": "300",

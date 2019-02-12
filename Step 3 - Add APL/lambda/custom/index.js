@@ -86,10 +86,12 @@ const PlayGameIntentHandler = {
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     if (supportsAPL(handlerInput)) {
+      let data = createDatasource.call(this, sessionAttributes);
       handlerInput.responseBuilder
         .addDirective({
             type: 'Alexa.Presentation.APL.RenderDocument',
-            document: require('./riddle.json')
+            document: require('./riddle.json'),
+            'datasources': data
           });
     }
 
@@ -141,10 +143,12 @@ const AnswerRiddleIntentHandler = {
       sessionAttributes.totalRids = 5;
 
       if (supportsAPL(handlerInput)) {
+        let data = createDatasource.call(this, sessionAttributes);
         handlerInput.responseBuilder
           .addDirective({
             type: 'Alexa.Presentation.APL.RenderDocument',
-            document: require('./finishedgame.json')
+            document: require('./finishedgame.json'),
+            'datasources': data
           });
       }
     } else {
@@ -152,10 +156,13 @@ const AnswerRiddleIntentHandler = {
       sessionAttributes.speechText += "Next riddle: " + sessionAttributes.currentRiddle.question;
     
       if (supportsAPL(handlerInput)) {
+        let data = createDatasource.call(this, sessionAttributes);
+
         handlerInput.responseBuilder
           .addDirective({
               type: 'Alexa.Presentation.APL.RenderDocument',
-              document: require('./riddle.json')
+              document: require('./riddle.json'),
+              'datasources': data
             });
       }
     }
@@ -267,10 +274,13 @@ const HintIntentHandler = {
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         if (supportsAPL(handlerInput)) {
+          let data = createDatasource.call(this, sessionAttributes);
+
           handlerInput.responseBuilder
             .addDirective({
               type: 'Alexa.Presentation.APL.RenderDocument',
-              document: require('./hint.json')
+              document: require('./hint.json'),
+              'datasources': data
             });
         }
 
@@ -417,6 +427,24 @@ function supportsAPL(handlerInput) {
         handlerInput.requestEnvelope.context.System.device.supportedInterfaces;
     const aplInterface = supportedInterfaces['Alexa.Presentation.APL'];
     return aplInterface != null && aplInterface != undefined;
+}
+
+function createDatasource(attributes) {
+  return {
+    "riddleGameData": {
+        "properties": {
+            "currentQuestionSsml": "<speak>" 
+                + attributes.currentRiddle.question
+                + "<speak>",
+            "currentLevel": attributes.currentLevel,
+            "currentQuestionNumber": (attributes.currentIndex + 1),
+            "numCorrect": attributes.correctCount,
+            "currentHintSsml": "<speak>" 
+                + attributes.currentRiddle.hints[attributes.currentHintIndex]
+                + "<speak>",
+        }
+    }
+  };
 }
 
 

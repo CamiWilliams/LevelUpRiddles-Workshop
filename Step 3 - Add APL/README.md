@@ -735,9 +735,48 @@ Now we have added all of our APL documents into our skill code. Each of these do
 
 The `datasource` property is a JSON object that can contain any type of information to be inflated on your APL document. This information is accessible in the `mainTemplate` of your APL document in the `payload` variable in `parameters` via databinding. 
 
-11. 
+11. **Add the following helper function** to formulate a consistent datasource for each APL directive:
+
+```
+function createDatasource(attributes) {
+  return {
+    "riddleGameData": {
+        "properties": {
+            "currentQuestionSsml": "<speak>" 
+                + attributes.currentRiddle.question
+                + "<speak>",
+            "currentLevel": attributes.currentLevel,
+            "currentQuestionNumber": (attributes.currentIndex + 1),
+            "numCorrect": attributes.correctCount,
+            "currentHintSsml": "<speak>" 
+                + attributes.currentRiddle.hints[attributes.currentHintIndex]
+                + "<speak>",
+        }
+    }
+  };
+}
+```
+In this function, `attributes` represents the current `sessionAttributes` of that state of the game.
+
+12. For each APL directive, **add a `'datasources'` attribute** pointing to the return value of the `createDatasource` function:
+
+```
+if (supportsAPL(handlerInput)) {
+    let data = createDatasource.call(this, sessionAttributes);
+    handlerInput.responseBuilder
+      .addDirective({
+          type: 'Alexa.Presentation.APL.RenderDocument',
+          document: require('./riddle.json'),
+          'datasources': data
+      });
+}
+```
+We have successfully added logic to send dynamic skill information to our APL documents.
+
 
 ### Task 3.5: Integrate transformers into your displays for a voice-first visual experience
+
+
 
 ### Task 3.6: Test that all the displays appear within your skill
 

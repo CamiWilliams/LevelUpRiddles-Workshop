@@ -56,7 +56,8 @@
                     },
                     {
                         "type": "Text",
-                        "text": "${payload.riddleGameData.properties.currentHintSsml}",
+                        "text": "${payload.riddleGameData.properties.currentHintText}",
+                        "speech": "${payload.riddleGameData.properties.currentHintSpeech}",
                         "width": "100vw",
                         "color": "@myWhite",
                         "fontWeight": "300",
