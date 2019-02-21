@@ -49,7 +49,7 @@ This task will walk you through creating a simple skill that quizzes the custome
 ### Task 0.4: Interaction Model
 
 1. In the navigation menu on the left, choose **JSON Editor**.
-2. **Copy** the JSON from [the en-US language model](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%200%20-%20Initialize%20Riddle%20Game/models/en-US.json).
+2. **Copy** the JSON from [the en-US language model](https://github.com/alexa-labs/skill-sample-nodejs-level-up-riddles/blob/master/Step%200%20-%20Initialize%20Riddle%20Game/models/en-US.json).
 
 Each of these JSON fields are **Intents**. Intents represent what your skill can do, they are an action Alexa will take. To prompt Alexa for the action, a user would say an **Utterance**. In the case of the **CancelIntent** , the **Utterance** a user would say to perform the cancel action would be &quot;cancel riddles game workshop&quot;.
 
@@ -103,10 +103,14 @@ The Lambda function for your skill has now been created. Now you need to attach 
 30. Code Entry Type: **Upload a .zip file**
 31. Ensure **Node.js 8.10** is selected for **Runtime**
 32. Handler: **index.handler**.
-33. Function Package: **Upload** a .zip of the contents in the lambda/custom folder of this repo.
+33. Function Package: **Upload** a .zip of the contents in the lambda/custom folder of this section of the repo.
+  - Clone this repo locally
+  - Navigate to 0 - Initialize Riddle Game/lambda/custom
+  - Zip the contents of this folder
+  - Upload the .zip
 34. Click the **Save** button in the top of the page. This will upload your function code into the Lambda container.
 
-After the Save is complete, you should see your code editor inline (Note, if your function code becomes large, this view will not be available after uploading, but will still run). 
+After the Save is complete, you may or may not see your code editor inline: if your function code becomes large, this view will not be available after uploading, but will still run. It is important to keep a local copy of your skill for this reason.
 
 ### Task 0.6: Test your voice interaction
 

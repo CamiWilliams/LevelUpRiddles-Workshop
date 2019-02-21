@@ -716,9 +716,9 @@ if (sessionAttributes.currentIndex == sessionAttributes.totalRids) {
 ```
 9. Copy the file [hint.json](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%203%20-%20Add%20APL/lambda/custom/hint.json) into `lambda/custom`.
 
-![finishedgame.json round display](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%203%20-%20Add%20APL/imgs_of_apl_screens/hint_round.png?raw=true)
+![hint.json round display](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%203%20-%20Add%20APL/imgs_of_apl_screens/hint_round.png?raw=true)
 
-![finishedgame.json landscape display](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%203%20-%20Add%20APL/imgs_of_apl_screens/hint_landscape.png?raw=true)
+![hint.json landscape display](https://github.com/CamiWilliams/LevelUpRiddles-Workshop/blob/master/Step%203%20-%20Add%20APL/imgs_of_apl_screens/hint_landscape.png?raw=true)
 
 10. In the `HintIntent`, when the customer has purchased hints, **add** an if statement with the **supportsAPL** function. In the if, add an APL directive adding the `hint.json` document.
 
