@@ -1,0 +1,20 @@
+{
+    "amazingRiddleChallengeData": {
+        "properties": {
+            "currentLevel": "easy",
+            "currentFormattedLevel": "Easy",
+            "currentIndex": 0,
+            "currentHintIndex": 0,
+            "currentScore": "0",
+            "currentRiddle": {
+				"question" : "I run all day and never walk, I tell you something, but I do not talk!",
+				"answer" : "clock",
+				"hints" : [
+					"I have two hands!",
+					"You can find me on a table, on a wall, on your wrist, or on your phone!",
+					"Check on me to see the time of day."
+				]
+			}
+        }
+    }
+}

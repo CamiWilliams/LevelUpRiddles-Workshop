@@ -1,0 +1,301 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "amazing riddle challenge",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "EasyMediumHardIntent",
+                    "slots": [
+                        {
+                            "name": "level",
+                            "type": "levelType"
+                        }
+                    ],
+                    "samples": [
+                        "play with the {level} questions",
+                        "{level} questions",
+                        "lets go with {level}",
+                        "play with the {level} riddles",
+                        "play with {level}",
+                        "{level} riddles",
+                        "i want to play {level} riddles",
+                        "{level}"
+                    ]
+                },
+                {
+                    "name": "AnswerIntent",
+                    "slots": [
+                        {
+                            "name": "answer",
+                            "type": "answerType"
+                        }
+                    ],
+                    "samples": [
+                        "the answer to the riddle is {answer}",
+                        "i think it is {answer} for the riddle",
+                        "i want to say it is {answer}",
+                        "lets do {answer}",
+                        "{answer} is my answer",
+                        "i think the answer is {answer}",
+                        "lets go with {answer}",
+                        "i think it is {answer}",
+                        "{answer}",
+                        "the answer is {answer}"
+                    ]
+                },
+                {
+                    "name": "HintIntent",
+                    "slots": [],
+                    "samples": [
+                        "i need my next hint",
+                        "give me my next hint",
+                        "use up hints",
+                        "use hint",
+                        "use a hint",
+                        "i need to use a hint",
+                        "i would like to use a hint",
+                        "give me a clue",
+                        "give me a hint",
+                        "i need a clue",
+                        "i need a hint"
+                    ]
+                },
+                {
+                    "name": "BuyIntent",
+                    "slots": [],
+                    "samples": [
+                        "i want to buy the hint pack",
+                        "buy the hint pack",
+                        "i want to buy hints",
+                        "i want to purchase something",
+                        "buy something",
+                        "what can i purchase",
+                        "tell me what i can buy",
+                        "i want to buy something",
+                        "what can i buy"
+                    ]
+                },
+                {
+                    "name": "MultiPlayerIntent",
+                    "slots": [],
+                    "samples": [
+                        "echo buttons",
+                        "competitive mode",
+                        "button mode",
+                        "play with buttons",
+                        "play with echo buttons",
+                        "play competitive mode",
+                        "play with two people",
+                        "multiplayer mode"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "levelType",
+                    "values": [
+                        {
+                            "id": "3",
+                            "name": {
+                                "value": "surprise me",
+                                "synonyms": [
+                                    "does not matter",
+                                    "i do not know",
+                                    "i do not care",
+                                    "random"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "2",
+                            "name": {
+                                "value": "hard",
+                                "synonyms": [
+                                    "harder than medium",
+                                    "advanced"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "1",
+                            "name": {
+                                "value": "medium",
+                                "synonyms": [
+                                    "intermediate",
+                                    "med"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "0",
+                            "name": {
+                                "value": "easy",
+                                "synonyms": [
+                                    "beginner",
+                                    "super easy"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "answerType",
+                    "values": [
+                        {
+                            "id": "01",
+                            "name": {
+                                "value": "repeat",
+                                "synonyms": [
+                                    "repeat the question",
+                                    "can you repeat the question",
+                                    "repeat the riddle",
+                                    "repeat riddle"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "00",
+                            "name": {
+                                "value": "i do not know",
+                                "synonyms": [
+                                    "i do not know the answer",
+                                    "i can not think of the answer",
+                                    "pass",
+                                    "skip this one",
+                                    "i am not sure"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "10",
+                            "name": {
+                                "value": "clock"
+                            }
+                        },
+                        {
+                            "id": "11",
+                            "name": {
+                                "value": "mirror"
+                            }
+                        },
+                        {
+                            "id": "12",
+                            "name": {
+                                "value": "sponge"
+                            }
+                        },
+                        {
+                            "id": "13",
+                            "name": {
+                                "value": "glove"
+                            }
+                        },
+                        {
+                            "id": "14",
+                            "name": {
+                                "value": "towel"
+                            }
+                        },
+                        {
+                            "id": "20",
+                            "name": {
+                                "value": "sand",
+                                "synonyms": [
+                                    "beach dirt"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "21",
+                            "name": {
+                                "value": "light switch",
+                                "synonyms": [
+                                    "lightswitch"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "22",
+                            "name": {
+                                "value": "iceberg",
+                                "synonyms": [
+                                    "ice berg"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "23",
+                            "name": {
+                                "value": "egg"
+                            }
+                        },
+                        {
+                            "id": "24",
+                            "name": {
+                                "value": "shadow"
+                            }
+                        },
+                        {
+                            "id": "30",
+                            "name": {
+                                "value": "footsteps",
+                                "synonyms": [
+                                    "feetsteps",
+                                    "feet steps",
+                                    "foot steps"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "31",
+                            "name": {
+                                "value": "charcoal",
+                                "synonyms": [
+                                    "coal"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "32",
+                            "name": {
+                                "value": "time"
+                            }
+                        },
+                        {
+                            "id": "33",
+                            "name": {
+                                "value": "joke"
+                            }
+                        },
+                        {
+                            "id": "34",
+                            "name": {
+                                "value": "pearl"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

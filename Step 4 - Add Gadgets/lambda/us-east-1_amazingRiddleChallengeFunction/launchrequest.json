@@ -1,0 +1,243 @@
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [
+        {
+            "description": "Colors",
+            "colors": {
+                "myBlack": "#343838",
+                "myPurple": "#9C0A54",
+                "myRed": "#FC2D47",
+                "myOrange": "#FD704B",
+                "myYellow": "#FDB04F",
+                "myWhite": "#FFFFFF"
+            }
+        }
+    ],
+    "styles": {},
+    "layouts": {
+        "HomePageButton": {
+            "parameters": [
+                "primaryColor",
+                "secondaryColor",
+                "title",
+                "argument"
+            ],
+            "items": [
+                {
+                    "when": "${viewport.shape == 'round'}",
+                    "type": "TouchWrapper",
+                    "width": "52vw",
+                    "height": "17vh",
+                    "item": {
+                        "type": "Container",
+                        "width": "52vw",
+                        "height": "17vh",
+                        "items": [
+                            {
+                                "type": "Frame",
+                                "width": "52vw",
+                                "height": "17vh",
+                                "backgroundColor": "${secondaryColor}",
+                                "position": "absolute"
+                            },
+                            {
+                                "type": "Frame",
+                                "width": "50vw",
+                                "height": "15vh",
+                                "backgroundColor": "${primaryColor}",
+                                "position": "absolute",
+                                "right": "2vw",
+                                "bottom": "2vh"
+                            },
+                            {
+                                "type": "Text",
+                                "text": "${title}",
+                                "width": "50vw",
+                                "height": "15vh",
+                                "textAlign": "center",
+                                "textAlignVertical": "center",
+                                "fontWeight": "500",
+                                "fontSize": "9vw"
+                            }
+                        ]
+                    },
+                    "onPress": {
+                        "type": "SendEvent",
+                        "arguments": [
+                             "${argument}"
+                        ]
+                    }
+                },
+                {
+                    "when": "${viewport.shape != 'round'}",
+                    "type": "TouchWrapper",
+                    "width": "42vw",
+                    "height": "20vh",
+                    "item": {
+                        "type": "Container",
+                        "width": "42vw",
+                        "height": "20vh",
+                        "items": [
+                            {
+                                "type": "Frame",
+                                "width": "42vw",
+                                "height": "20vh",
+                                "backgroundColor": "${secondaryColor}",
+                                "position": "absolute"
+                            },
+                            {
+                                "type": "Frame",
+                                "width": "40vw",
+                                "height": "18vh",
+                                "backgroundColor": "${primaryColor}",
+                                "position": "absolute",
+                                "right": "2vw",
+                                "bottom": "2vh"
+                            },
+                            {
+                                "type": "Text",
+                                "text": "${title}",
+                                "width": "40vw",
+                                "height": "18vh",
+                                "textAlign": "center",
+                                "textAlignVertical": "center",
+                                "fontWeight": "500",
+                                "fontSize": "6vw"
+                            }
+                        ]
+                    },
+                    "onPress": {
+                        "type": "SendEvent",
+                        "arguments": [
+                             "${argument}"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "mainTemplate": {
+        "parameters": [
+            "payload"
+        ],
+        "items": [
+            {
+                "type": "Container",
+                "width": "100vw",
+                "height": "100vh",
+                "items": [
+                    {
+                        "type": "Frame",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "backgroundColor": "@myBlack",
+                        "position": "absolute"
+                    },
+                    {
+                        "when": "${viewport.shape == 'round'}",
+                        "type": "Container",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "alignItems": "center",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "text": "Amazing <br> Riddle Challenge",
+                                "width": "100vw",
+                                "textAlign": "center",
+                                "fontWeight": "900",
+                                "fontSize": "9vw",
+                                "paddingTop": "5vh",
+                                "paddingLeft": "10vh",
+                                "paddingRight": "10vh"
+                            },
+                            {
+                                "type": "HomePageButton",
+                                "primaryColor": "@myYellow",
+                                "secondaryColor": "@myOrange",
+                                "title": "Easy",
+                                "argument": "easy",
+                                "position": "absolute",
+                                "top": "30vh"
+                            },
+                            {
+                                "type": "HomePageButton",
+                                "primaryColor": "@myOrange",
+                                "secondaryColor": "@myRed",
+                                "title": "Medium",
+                                "argument": "medium",
+                                "position": "absolute",
+                                "top": "50vh"
+                            },
+                            {
+                                "type": "HomePageButton",
+                                "primaryColor": "@myRed",
+                                "secondaryColor": "@myPurple",
+                                "title": "Hard",
+                                "argument": "hard",
+                                "position": "absolute",
+                                "top": "70vh"
+                            }
+                        ] 
+                    },
+                    {
+                        "when": "${viewport.shape != 'round'}",
+                        "type": "Container",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "direction": "row",
+                        "items": [
+                                {
+                                    "type": "Text",
+                                    "text": "Amazing Riddle Challenge",
+                                    "width": "50vw",
+                                    "height": "100vh",
+                                    "textAlignVertical": "center",
+                                    "fontWeight": "900",
+                                    "fontSize": "7.5vw",
+                                    "paddingLeft": "10vh"
+                                },
+                                {
+                                    "type": "Container",
+                                    "width": "50vw",
+                                    "height": "100vh",
+                                    "items": [                            
+                                        {
+                                            "type": "HomePageButton",
+                                            "primaryColor": "@myYellow",
+                                            "secondaryColor": "@myOrange",
+                                            "title": "Easy",
+                                            "argument": "easy",
+                                            "position": "absolute",
+                                            "top": "15vh"
+                                        },
+                                        {
+                                            "type": "HomePageButton",
+                                            "primaryColor": "@myOrange",
+                                            "secondaryColor": "@myRed",
+                                            "title": "Medium",
+                                            "argument": "medium",
+                                            "position": "absolute",
+                                            "top": "40vh"
+                                        },
+                                        {
+                                            "type": "HomePageButton",
+                                            "primaryColor": "@myRed",
+                                            "secondaryColor": "@myPurple",
+                                            "title": "Hard",
+                                            "argument": "hard",
+                                            "position": "absolute",
+                                            "top": "65vh"
+                                        }
+                                ]
+                            }
+                        ] 
+                    }
+                ]
+            }
+        ]
+    }
+}

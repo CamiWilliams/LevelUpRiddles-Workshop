@@ -1,0 +1,38 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "uri": "amazingRiddleChallengeFunction",
+          "sourceDir": "lambda/us-east-1_amazingRiddleChallengeFunction"
+        },
+        "interfaces": [
+          {
+            "type": "GAME_ENGINE"
+          },
+          {
+            "type": "GADGET_CONTROLLER"
+          },
+          {
+            "type": "ALEXA_PRESENTATION_APL"
+          }
+        ]
+      }
+    },
+    "manifestVersion": "1.0",
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "name": "Amazing Riddle Challenge"
+        }
+      },
+      "gadgetSupport": {
+        "requirement": "OPTIONAL",
+        "maxGadgetButtons": 2,
+        "minGadgetButtons": 2,
+        "numPlayersMax": 2,
+        "numPlayersMin": 2
+      }
+    }
+  }
+}

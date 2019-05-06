@@ -1,0 +1,127 @@
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [
+        {
+            "description": "Colors",
+            "colors": {
+                "myBlack": "#343838",
+                "myPurple": "#9C0A54",
+                "myRed": "#FC2D47",
+                "myOrange": "#FD704B",
+                "myYellow": "#FDB04F",
+                "myWhite": "#FFFFFF"
+            }
+        }
+    ],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "parameters": [
+            "payload"
+        ],
+        "items": [
+            {
+                "type": "Container",
+                "width": "100vw",
+                "height": "100vh",
+                "items": [
+                    {
+                        "when": "${payload.amazingRiddleChallengeData.properties.currentLevel == 'easy'}",
+                        "type": "Frame",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "backgroundColor": "@myYellow",
+                        "position": "absolute"
+                    },
+                    {
+                        "when": "${payload.amazingRiddleChallengeData.properties.currentLevel == 'medium'}",
+                        "type": "Frame",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "backgroundColor": "@myOrange",
+                        "position": "absolute"
+                    },
+                    {
+                        "when": "${payload.amazingRiddleChallengeData.properties.currentLevel == 'hard'}",
+                        "type": "Frame",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "backgroundColor": "@myRed",
+                        "position": "absolute"
+                    },
+                    {
+                        "type": "Container",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "items": [
+                            {
+                                "type": "Text",
+                                "text": "${payload.amazingRiddleChallengeData.properties.currentFormattedLevel} Riddle #${payload.amazingRiddleChallengeData.properties.currentIndex + 1}",
+                                "width": "100vw",
+                                "textAlign": "center",
+                                "fontSize": "6vw",
+                                "fontWeight": "100",
+                                "paddingTop": "5vh",
+                                "paddingBottom": "5vh"
+                            },
+                            {
+                                "when": "${payload.amazingRiddleChallengeData.properties.currentLevel == 'easy'}",
+                                "type": "Frame",
+                                "width": "100vw",
+                                "height": "60vh",
+                                "backgroundColor": "@myOrange",
+                                "item": {
+                                    "type": "Text",
+                                    "text": "${payload.amazingRiddleChallengeData.properties.currentRiddle.question}",
+                                    "width": "100vw",
+                                    "height": "60vh",
+                                    "textAlign": "center",
+                                    "textAlignVertical": "center",
+                                    "fontSize": "5vw",
+                                    "fontWeight": "700"
+                                }
+                            },
+                            {
+                                "when": "${payload.amazingRiddleChallengeData.properties.currentLevel == 'medium'}",
+                                "type": "Frame",
+                                "width": "100vw",
+                                "height": "60vh",
+                                "backgroundColor": "@myRed",
+                                "item": {
+                                    "type": "Text",
+                                    "text": "${payload.amazingRiddleChallengeData.properties.currentRiddle.question}",
+                                    "width": "100vw",
+                                    "height": "60vh",
+                                    "textAlign": "center",
+                                    "textAlignVertical": "center",
+                                    "fontSize": "5vw",
+                                    "fontWeight": "700"
+                                }
+                            },
+                            {
+                                "when": "${payload.amazingRiddleChallengeData.properties.currentLevel == 'hard'}",
+                                "type": "Frame",
+                                "width": "100vw",
+                                "height": "60vh",
+                                "backgroundColor": "@myPurple",
+                                "item": {
+                                    "type": "Text",
+                                    "text": "${payload.amazingRiddleChallengeData.properties.currentRiddle.question}",
+                                    "width": "100vw",
+                                    "height": "60vh",
+                                    "textAlign": "center",
+                                    "textAlignVertical": "center",
+                                    "fontSize": "5vw",
+                                    "fontWeight": "700"
+                                }
+                            }
+                        ] 
+                    }
+                ]
+            }
+        ]
+    }
+}
